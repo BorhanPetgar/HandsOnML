@@ -1,0 +1,27 @@
+version: "3"
+services:
+  handson-ml:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile #Dockerfile.gpu
+      args:
+        - username=devel
+        - userid=1000
+    container_name: handson-ml
+    image: ageron/handson-ml:latest #latest-gpu
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    ports:
+      - "8888:8888"
+      - "6006:6006"
+    volumes:
+      - ../:/home/devel/handson-ml
+    command: /opt/conda/envs/tf1/bin/jupyter notebook --ip='0.0.0.0' --port=8888 --no-browser
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #      - capabilities: [gpu]
